@@ -9,27 +9,29 @@ import (
 )
 
 func Run() {
-	if len(os.Args) < 1 {
+	var helpFlag = flag.Bool("help", false, "Show help message")
+	flag.Usage = showUsageMessage
+	flag.Parse()
+
+	if *helpFlag {
 		showUsageMessage()
 		return
 	}
 
-	flag.Usage = showUsageMessage
-
-	flag.Parse()
-	username := os.Args[1]
+	username := flag.Arg(0)
+	if username == "" {
+		showUsageMessage()
+		return
+	}
 
 	events, err := githubactivity.GetUserActivity(username)
 	if err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
 	}
 
-	// - Pushed 3 commits to kamranahmedse/developer-roadmap
-	// - Opened a new issue in kamranahmedse/developer-roadmap
-	// - Starred kamranahmedse/developer-roadmap
-
-	fmt.Println("Output:")
+	fmt.Printf("GitHub activity for user %s:\n", username)
 	for _, event := range events {
-		fmt.Println(event)
+		fmt.Println(event.String())
 	}
 }

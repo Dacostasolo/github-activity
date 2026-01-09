@@ -66,6 +66,11 @@ If you prefer to build the executable from the source code, follow these steps:
 
    This will create an executable named `github-activity` in the `bin/` directory.
 
+3. **Project Source**
+   ```bash
+   roadmap.sh golang project https://roadmap.sh/projects/github-user-activity
+   ```
+
 ## Running the Executable (after building)
 
 After building the executable, you can run it directly:
